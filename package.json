@@ -1,0 +1,38 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:helpers": "node scripts/generate-helper-manifest.mjs",
+    "build:models": "node scripts/generate-model-manifest.mjs",
+    "build:templates": "node scripts/generate-template-manifest.mjs",
+    "build:static": "node scripts/generate-static-manifest.mjs",
+    "build:durable": "node scripts/generate-durable-manifest.mjs",
+    "build:generated": "npm run build:helpers && npm run build:models && npm run build:templates && npm run build:static && npm run build:durable",
+    "predev": "npm run build:generated",
+    "dev": "wrangler dev",
+    "predeploy": "npm run build:generated",
+    "deploy": "wrangler deploy",
+    "pretest": "npm run build:generated",
+    "test": "npm run test:ts && npm run test:ruby",
+    "test:ts": "vitest run",
+    "test:ruby": "ruby -Iapp -Iapp/helpers test/http_client_test.rb",
+    "db:migrate": "wrangler d1 migrations apply wasm-d1-test",
+    "db:migration:new": "wrangler d1 migrations create wasm-d1-test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251014.0",
+    "@types/node": "^24.9.2",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.45.0"
+  },
+  "dependencies": {
+    "@hibana-apps/runtime": "^0.1.8"
+  }
+}

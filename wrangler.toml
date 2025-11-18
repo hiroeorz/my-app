@@ -1,0 +1,61 @@
+compatibility_date = "2024-10-27"
+compatibility_flags = ["nodejs_compat"]
+main = "src/index.ts"
+name = "my-app"
+
+[build]
+command = "npm run build:generated"
+
+[[kv_namespaces]]
+binding = "MY_KV"
+id = "ce12850a87e743d19fd008a5b32cc336"
+preview_id = "d150977f194b4e5993a518ae83202995"
+
+[[d1_databases]]
+binding = "DB"
+database_id = "5f755bff-6d38-4575-8ef5-6a0ed4861503"
+database_name = "wasm-d1-test"
+migrations_dir = "migrations/wasm-d1-test"
+
+[[r2_buckets]]
+binding = "MY_R2"
+bucket_name = "wasm-r2-sample"
+preview_bucket_name = "wasm-r2-sample"
+
+[[queues.producers]]
+binding = "TASK_QUEUE"
+queue = "my-app-tasks"
+
+[[queues.consumers]]
+queue = "my-app-tasks"
+
+[durable_objects]
+bindings = [
+  {name = "COUNTER", class_name = "Counter"},
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["Counter"]
+
+[ai]
+binding = "AI"
+remote = true
+
+[[rules]]
+fallthrough = true
+globs = ["**/*.rb"]
+type = "Text"
+
+[[rules]]
+fallthrough = true
+globs = ["**/*.erb"]
+type = "Text"
+
+[[rules]]
+fallthrough = true
+globs = ["public/**/*"]
+type = "Text"
+
+[triggers]
+crons = ["9 15 * * *", "0 12 * * *"]

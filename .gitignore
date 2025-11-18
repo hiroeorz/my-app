@@ -1,0 +1,8 @@
+node_modules/
+.wrangler/
+.ruby-lsp/
+dist/
+.env
+.dev.vars
+npm-debug.log*
+src/generated/

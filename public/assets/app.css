@@ -1,0 +1,204 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #f5f5f7;
+  color: #0f172a;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem 0;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(15, 23, 42, 0.7);
+}
+
+header img {
+  width: 32px;
+  height: 32px;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: #ea580c;
+}
+
+main {
+  flex: 1;
+  width: min(960px, 100%);
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  text-align: left;
+}
+
+.hero .eyebrow {
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(248, 250, 252, 0.7);
+  margin-bottom: 1rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 3.75rem);
+  margin: 0 0 1rem;
+  line-height: 1.1;
+}
+
+.hero .accent.hibana {
+  color: #ea580c;
+}
+
+.hero .accent.ruby {
+  color: #dc2626;
+}
+
+.description {
+  color: rgba(15, 23, 42, 0.82);
+  line-height: 1.7;
+  max-width: 640px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.button {
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button.primary {
+  background: linear-gradient(120deg, #f97316, #f97316);
+  color: white;
+  box-shadow: 0 20px 40px rgba(249, 115, 22, 0.25);
+}
+
+.button.ghost {
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  color: rgba(15, 23, 42, 0.8);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}
+
+.feature-stack {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.feature {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+}
+
+.feature-text {
+  flex: 1 1 0;
+}
+
+.feature-text h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.feature-text p {
+  margin: 0;
+  color: rgba(15, 23, 42, 0.74);
+  line-height: 1.6;
+}
+
+.snippet {
+  margin-top: 0;
+  padding: 0.95rem 1.15rem;
+  border-radius: 0.75rem;
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: "Fira Code", Consolas, monospace;
+  font-size: 1.15rem;
+  overflow-x: auto;
+  flex: 1 1 0;
+}
+
+.snippet code {
+  display: block;
+  white-space: pre;
+}
+
+.snippet .kw {
+  color: #3b82f6;
+}
+
+.snippet .str {
+  color: #06b6d4;
+}
+
+.snippet .do {
+  color: #f97316;
+}
+
+.snippet .erb {
+  color: #ea580c;
+}
+
+@media (max-width: 720px) {
+  .feature {
+    flex-direction: column;
+  }
+
+  .feature .snippet {
+    width: 100%;
+  }
+}
+
+
+
+footer {
+  padding: 1.5rem;
+  text-align: center;
+  color: rgba(15, 23, 42, 0.5);
+  font-size: 0.85rem;
+}
+
+code {
+  background: rgba(15, 23, 42, 0.8);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.35rem;
+  font-size: 1rem;
+  color: #f8fafc;
+}
+
+code.inline {
+  display: inline-block;
+  background: rgba(15, 23, 42, 0.15);
+  color: #0f172a;
+  font-size: 0.95rem;
+}
+}

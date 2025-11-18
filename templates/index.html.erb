@@ -1,0 +1,17 @@
+<section class="hero">
+  <h1>Hello <%= name || "Hibana" %>! ⚡</h1>
+  <p>
+    このページは <code>templates/index.html.erb</code> からレンダリングされています。
+    <br />
+    <small>locals: name=<%= name.inspect %>, age=<%= age.inspect %></small>
+  </p>
+</section>
+
+<section class="links">
+  <ul>
+    <li><a href="/ai-demo-llama">Workers AI (LLaMA)</a></li>
+    <li><a href="/kv">Workers KV</a></li>
+    <li><a href="/r2">R2</a></li>
+    <li><a href="/http-get">HTTP client sample</a></li>
+  </ul>
+</section>

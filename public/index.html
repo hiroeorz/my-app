@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>🧨Hibana Static Assets</title>
+    <link rel="stylesheet" href="/assets/app.css" />
+  </head>
+  <body>
+    <header>
+      <img src="/assets/logo.svg" alt="Hibana Logo" />
+      <span class="brand">Hibana</span>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Cloudflare Workers × Ruby</p>
+        <h1>
+          <span class="accent hibana">Hibana</span> ignites your <span class="accent ruby">Ruby</span> apps at the edge
+        </h1>
+        <p class="description">
+          Hibana is a CLI + runtime that makes Ruby feel at home on Cloudflare Workers. It ships a Hono / Sinatra style
+          DSL, Cloudflare bindings, templates, and a static asset pipeline. Run
+          <code class="inline">npm create hibana@latest &lt;project-name&gt;</code> locally to start in seconds, then
+          use <code class="inline">npx wrangler deploy</code> when you are ready to ship.
+        </p>
+        <div class="actions">
+          <a
+            class="button primary"
+            href="https://github.com/hiroeorz/cloudflare_workers_ruby_template"
+            target="_blank"
+            rel="noreferrer"
+            >See sample route</a
+          >
+          <a class="button ghost" href="https://github.com/hiroeorz/hibana" target="_blank" rel="noreferrer"
+            >View on GitHub</a
+          >
+        </div>
+      </section>
+
+      <section class="feature-stack">
+        <article class="feature">
+          <div class="feature-text">
+            <h3>Ruby-friendly DSL</h3>
+            <p>
+              Define routes with a Hono / Sinatra-like DSL. Helpers such as <code class="inline">c.text</code>,
+              <code class="inline">c.json</code>, and <code class="inline">c.render</code> keep handlers clear and
+              expressive.
+            </p>
+          </div>
+          <pre
+            class="snippet"
+          ><code><span class="kw">get</span> <span class="str">"/"</span> <span class="do">do</span> |c|
+  c.text(<span class="str">"Hello Hibana!"</span>)
+<span class="kw">end</span></code></pre>
+        </article>
+        <article class="feature">
+          <div class="feature-text">
+            <h3>Cloudflare bindings</h3>
+            <p>
+              Workers KV / D1 / R2 / Workers AI clients ship out of the box, so Ruby code can talk to every binding with
+              plain objects.
+            </p>
+          </div>
+          <pre
+            class="snippet"
+          ><code><span class="kw">get</span> <span class="str">"/d1"</span> <span class="do">do</span> |c|
+  db = c.env(:DB)
+  result = db.prepare(<span class="str">"SELECT * FROM posts"</span>)
+              .bind
+              .first
+  c.json(result)
+<span class="kw">end</span></code></pre>
+        </article>
+        <article class="feature">
+          <div class="feature-text">
+            <h3>Workers AI ready</h3>
+            <p>
+              Call Workers AI directly from Ruby. Describe prompts and payloads with hashes, then send them straight to
+              the model.
+            </p>
+          </div>
+          <pre
+            class="snippet"
+          ><code><span class="kw">get</span> <span class="str">"/ai-demo"</span> <span class="do">do</span> |c|
+  ai = c.env(:AI)
+  result = ai.run(
+    model: <span class="str">"@cf/meta/llama-3.1-8b"</span>,
+    payload: { prompt: <span class="str">"Hello from Hibana"</span> },
+  )
+  c.json(result)
+<span class="kw">end</span></code></pre>
+        </article>
+        <article class="feature">
+          <div class="feature-text">
+            <h3>Seamless asset pipeline</h3>
+            <p>
+              ERB templates and static files are turned into manifests and streamed to Workers. Run
+              <code class="inline">npm run build:generated</code> before dev/build/deploy and you are done.
+            </p>
+          </div>
+          <pre class="snippet"><code>&lt;h1&gt;My name is <span class="erb">&lt;%= name %&gt;</span>&lt;/h1&gt;
+&lt;p&gt;Nickname is <span class="erb">&lt;%= nickname %&gt;</span>&lt;/p&gt;</code></pre>
+        </article>
+      </section>
+    </main>
+    <footer>
+      <small>Built with Hibana · Cloudflare Workers + Ruby runtime</small>
+    </footer>
+  </body>
+</html>
