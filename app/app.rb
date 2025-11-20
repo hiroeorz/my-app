@@ -4,7 +4,12 @@ require "json"
 require "js"
 require "securerandom"
 
-D1.register_binding("DB") 
+# Binding register.
+R2.register_binding("MY_R2")
+KV.register_binding("MY_KV")
+D1.register_binding("DB")
+WorkersAI.register_binding("AI")
+
 
 # Redirect to /index.html
 get "/" do |c|
@@ -13,64 +18,104 @@ end
 
 # hello world
 get "/hello" do |c|
-  c.text("Hello from Ruby WASM")
+  c.text("Hello Hibana ⚡")
+end
+
+# Path parameter sample
+get "/post/:year/:month/:day" do |c|
+  year = c.params[:year]
+  month = c.params[:month]
+  day = c.params[:day]
+  c.text("#{year}-#{month}-#{day}")
+end
+
+# GET query sample. /query?name=Mike&age=20
+get "/query" do |c|
+  name = c.query["name"]
+  age = c.query["age"]
+  c.text("Name: #{name}, Age: #{age}")
+end
+
+# Post body echo sample
+post "/echo" do |c|
+  c.json(c.json_body)
 end
 
 # Cloudflare D1 sample.
 get "/d1" do |c|
   db = c.env(:DB)
+  result = db.prepare("SELECT * FROM posts WHERE id = ?").bind(1).first
+  c.json(result)
+end
+
+get "/d1-insert" do |c|
+  db = c.env(:DB)
   db.prepare("DELETE FROM posts").run
+  db.prepare("DELETE FROM users").run
 
-  insert_stmt = db.prepare(<<~SQL)
-    INSERT INTO posts (user_id, title, status, views)
-    VALUES (?, ?, ?, ?)
-  SQL
-  insert_stmt.bind(1, "Sample post #{SecureRandom.hex(4)}", "draft", 0).run
+  db.prepare("INSERT INTO users (id, name, email) VALUES (?, ?, ?)")
+    .bind(1, "ORM Sample User", "orm-sample@example.com")
+    .run
 
-  row = db.prepare("SELECT * FROM posts ORDER BY id DESC LIMIT 1").first
-  c.text(row ? JSON.generate(row) : "posts テーブルにデータがありません")
+  db.prepare("INSERT INTO posts (id, user_id, title, status) VALUES (?, ?, ?, ?)")
+    .bind(1, 1, "Demo post from /d1-insert", "draft")
+    .run
+
+  db.prepare("UPDATE posts SET status = ?, views = ? WHERE id = ?").bind("published", 1001, 1).run
+
+  c.json({ inserted_id: 1 })
 end
 
 # ORM mapper sample.
 get "/orm/sample" do |c|
-  db = c.env(:DB)
-  sample_user_id = 999
+  posts = Post
+    .published
+    .where("views >= ?", 1_000)
+    .order(views: :desc)
+    .limit(20)
 
-  db.prepare(<<~SQL)
-    INSERT OR IGNORE INTO users (id, name, email)
-    VALUES (?, ?, ?)
-  SQL
-    .bind(sample_user_id, "ORM Sample User", "orm-sample@example.com")
-    .run
+  c.json(posts.map(&:as_json))
+end
 
-  demo_post = nil
-  begin
-    demo_post = Post.create!(
-      user_id: sample_user_id,
-      title: "ORM sample #{SecureRandom.hex(3)}",
-      status: "draft",
-    )
-    demo_post.update!(status: "published", views: demo_post.views + 1)
+# gpt-oss sample
+get "/ai-demo-gpt-oss" do |c|
+  ai = c.env(:AI)
+  prompt = "Cloudflare Workers AIとはなんですか？ 日本語でわかりやすく教えて"
+  model = "@cf/openai/gpt-oss-20b"
 
-    latest_posts = Post.order(id: :desc).limit(3).map do |post|
-      {
-        id: post.id,
-        title: post.title,
-        status: post.status,
-        views: post.views,
+  result = ai.run(
+    model: model,
+    payload: {
+      input: prompt,
+      reasoning: {
+        effort: "low",
+        summary: "auto"
       }
-    end
+    },
+  )
+  c.json({prompt: prompt, result: result})
+rescue WorkersAI::Error => e
+  c.json({ error: e.message, details: e.details }, status: 500)
+end
 
-    payload = {
-      created: demo_post.as_json,
-      published_count: Post.published.count,
-      latest: latest_posts,
-    }
-    c.json(payload)
-  ensure
-    demo_post&.destroy
-    Post.where(user_id: sample_user_id).delete_all
-  end
+get "/template" do |c|
+  c.render("index", name: "Hibana", age: 50)
+end
+
+# Cloudflare R2 sample.
+get "/r2" do |c|
+  bucket = c.env(:MY_R2)
+
+  key = "my-key"
+  value = "This is R2 sample."
+
+  # 保存
+  bucket.put(key, value)
+
+  # 参照
+  value = bucket.get(key).text
+
+  c.text("R2 Object [key:#{key}]  [value:#{value}]")
 end
 
 # html sample
@@ -81,13 +126,6 @@ end
 # json sample.
 get  "/sample.js" do |c|
   c.json({name: "Hiroe", age: 50})
-end
-
-# GET query sample. /query?name=Mike&age=20
-get "/query" do |c|
-  name = c.query["name"]
-  age = c.query["age"]
-  c.text("Name: #{name}, Age: #{age}")
 end
 
 # simple queue enqueue sample
