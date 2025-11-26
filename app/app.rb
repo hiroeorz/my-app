@@ -222,6 +222,36 @@ get "/posts/crud-demo" do |c|
   )
 end
 
+
+get "/vectorize-demo" do |c|
+  vectorize = c.env(:VECTORIZE)
+  ai = c.env(:AI)
+  model = "@cf/baai/bge-m3" # 1024次元
+
+  doc_text = "多言語のテキストをベクトル化して検索します。"
+  doc_embed = ai.run(model: model, payload: { text: [doc_text] })
+  doc_vector = doc_embed["data"][0]
+
+  vectorize.upsert(
+    vectors: [
+      { id: "doc-1", values: doc_vector, metadata: { lang: "ja", note: "demo" } },
+    ],
+  )
+
+  query_text = "このデモは何をしますか？"
+  query_embed = ai.run(model: model, payload: { text: [query_text] })
+  query_vector = query_embed["data"][0]
+
+  result = vectorize.query(
+    top_k: 2,
+    vector: query_vector,
+    include_metadata: true,
+    include_values: false,
+  )
+
+   c.json(result[:matches])
+end
+
 get "/durable/counter" do |c|
   result = c.env(:COUNTER)
     .fetch(name: "global-counter")

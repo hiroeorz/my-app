@@ -33,6 +33,6 @@
     "wrangler": "^4.45.0"
   },
   "dependencies": {
-    "@hibana-apps/runtime": "^0.1.8"
+    "@hibana-apps/runtime": "file:../hibana/packages/runtime"
   }
 }

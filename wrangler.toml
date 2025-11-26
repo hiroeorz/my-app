@@ -35,11 +35,16 @@ bindings = [
 ]
 
 [[migrations]]
-tag = "v1"
 new_classes = ["Counter"]
+tag = "v1"
 
 [ai]
 binding = "AI"
+remote = true
+
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "my-index"
 remote = true
 
 [[rules]]
