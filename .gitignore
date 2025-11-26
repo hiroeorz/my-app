@@ -6,3 +6,4 @@ dist/
 .dev.vars
 npm-debug.log*
 src/generated/
+vendor/bundle/
